@@ -36,7 +36,47 @@ class ArticleDetailsRepository {
       }
     }
   }
+  Future<void> addOrDeleteIfExisted(ArticleDetailsItem article) async {
+    var box = await Hive.openBox<ArticleDetailsItem>(_boxName);
 
+    int? existingKey;
+
+    // Search for the article by its URL
+    for (var key in box.keys) {
+      var item = box.get(key);
+      if (item != null && item.url == article.url) {
+        existingKey = key as int?;
+        break;
+      }
+    }
+
+    if (existingKey != null) {
+      // Delete the existing article
+      await box.delete(existingKey);
+    } else {
+      // Add the new article
+      await box.add(article);
+    }
+  }
+  Future<void> deleteItemByUrl(String url) async {
+    var box = await Hive.openBox<ArticleDetailsItem>(_boxName);
+
+    int? keyToDelete;
+
+    // Search for the article by its URL
+    for (var key in box.keys) {
+      var item = box.get(key);
+      if (item != null && item.url == url) {
+        keyToDelete = key as int?;
+        break;
+      }
+    }
+
+    if (keyToDelete != null) {
+      // Delete the article if found
+      await box.delete(keyToDelete);
+    }
+  }
   // Optionally, method to get all stored articles
   Future<List<ArticleDetailsItem>> getArticles() async {
     var box = await Hive.openBox<ArticleDetailsItem>(_boxName);

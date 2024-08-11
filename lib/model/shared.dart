@@ -48,13 +48,13 @@ ArticleDetailsRepository articleDetailsRepository = ArticleDetailsRepository();
 addItemToStaredItems(ArticleDetailsItem item){
   staredUrls.add(item.url);
   staredArticles.add(item);
-  articleDetailsRepository.updateOrAddListOfArticles(staredArticles);
+  articleDetailsRepository.addOrDeleteIfExisted(item);
   staredArticles.forEach((v){print(v.url+"\n");});
 }
 removeItemFromStaredItems(String url){
   staredUrls.remove(url);
   staredArticles.removeWhere((item) => item.url == url);
-  articleDetailsRepository.updateOrAddListOfArticles(staredArticles);
+  articleDetailsRepository.deleteItemByUrl(url);
   staredArticles.forEach((v){print(v.url+"\n");});
 }
 ////////////// API Action \\\\\\\\\\\\\\\\\
