@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:profissional_news_app/model/app_providers/topics_categorized_news_provider.dart';
 import 'package:profissional_news_app/model/app_utitlities.dart';
-import 'package:profissional_news_app/model/shared.dart';
-import 'package:profissional_news_app/screens/shared_ui_components.dart';
+import 'package:profissional_news_app/screens_and_widgets/shared_ui_components.dart';
+import 'package:profissional_news_app/screens_and_widgets/topic_categorized_news_item.dart';
+import 'package:provider/provider.dart';
 import '../model/specific_source.dart';
 class NewsWithFiltersScreen extends StatefulWidget {
   const NewsWithFiltersScreen({super.key});
@@ -13,19 +15,13 @@ class NewsWithFiltersScreen extends StatefulWidget {
 }
 
 class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
-  List<String> topicFilteringItems = [
-    "General",
-    "Entertainment",
-    "Health",
-    "Sports",
-    "Business",
-    'Technology',
-  ];
-  String selectedFilter = "General";
+
+   String selectedFilter = "General";
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
     final width = MediaQuery.sizeOf(context).width;
+    final provider = Provider.of<TopicsCategorizedNewsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -45,7 +41,7 @@ class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
           Container(
             height: height,
             child: FutureBuilder<List<Articles>>(
-              future: fetchEveryThingApi(),
+              future: provider.fetchEveryThingApi(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -58,8 +54,7 @@ class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                          'Something went wrong, check the connection and try again'),
+                      Text(provider.errorMessage),
                       SizedBox(
                         height: 40,
                       ),
@@ -76,7 +71,7 @@ class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
                   );
                 } else {
                   return ListView.builder(
-                      itemCount: filtered_articles.length,
+                      itemCount: provider.filtered_articles.length,
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return SizedBox(
@@ -84,21 +79,19 @@ class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
                             width: width,
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: topicFilteringItems.length,
+                                itemCount: provider.topicFilteringItems.length,
                                 itemBuilder: (context, index) =>
                                     GestureDetector(
                                       onTap: () {
-                                        selectedFilter =
-                                            topicFilteringItems[index];
-                                        topic = selectedFilter;
-                                        setState(() {});
+                                        selectedFilter = provider.topicFilteringItems[index];
+                                        provider.onTopicChanged(index);
                                       },
                                       child: Container(
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 6, vertical: 8),
                                         padding: EdgeInsets.all(8),
                                         child: Text(
-                                          topicFilteringItems[index],
+                                          provider.topicFilteringItems[index],
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18,
@@ -106,12 +99,12 @@ class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
                                         ),
                                         decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(12),
+                                            BorderRadius.circular(12),
                                             color:
-                                                (topicFilteringItems[index] ==
-                                                        selectedFilter)
-                                                    ? Colors.teal
-                                                    : Colors.grey),
+                                            (provider.topicFilteringItems[index] ==
+                                                selectedFilter)
+                                                ? Colors.teal
+                                                : Colors.grey),
                                       ),
                                     )),
                           );
@@ -120,7 +113,7 @@ class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
                             margin: EdgeInsets.all(8),
                             child: CategorizedNewsWidget( screenHeight: height,screenWidth: width,
                               articleDetailsItem:AppUtitlities.extractArticlesDetailsInfo(snapshot.data![index] ),
-                              ),
+                            ),
                           );
                         }
                       });

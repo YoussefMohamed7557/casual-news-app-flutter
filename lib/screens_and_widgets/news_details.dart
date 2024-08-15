@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:profissional_news_app/screens/shared_ui_components.dart';
+import 'package:profissional_news_app/screens_and_widgets/shared_ui_components.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../model/shared.dart';
+import '../model/article_details_item_model.dart';
 
 class NewsDetails extends StatelessWidget {
   static const String route = "NewsDetails";

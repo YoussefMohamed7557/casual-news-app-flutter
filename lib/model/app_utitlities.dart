@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:profissional_news_app/model/shared.dart';
+import 'package:profissional_news_app/model/article_details_item_model.dart';
 import 'package:profissional_news_app/model/specific_source.dart';
 
 class AppUtitlities{

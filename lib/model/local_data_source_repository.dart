@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
-import 'package:profissional_news_app/model/shared.dart';
+import 'package:profissional_news_app/model/article_details_item_model.dart';
 
-class ArticleDetailsRepository {
+class LocalDataSourceRepository {
   static const String _boxName = 'articleDetailsBox';
 
   // Method to store the list of articles

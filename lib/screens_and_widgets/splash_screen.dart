@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:profissional_news_app/screens/home_screen.dart';
+import 'package:profissional_news_app/screens_and_widgets/home_screen/home_screen.dart';
 class SplashScreen extends StatefulWidget {
   static const String route = "SplashScreen";
   const SplashScreen({super.key});

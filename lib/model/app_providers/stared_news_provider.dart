@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:profissional_news_app/model/shared.dart';
-import 'articel_details_repository.dart';
+import 'package:profissional_news_app/model/article_details_item_model.dart';
+import '../local_data_source_repository.dart';
 class StaredNewsProvider extends ChangeNotifier{
   List<String> staredUrls = [];
   List<ArticleDetailsItem> staredArticles = [];
-  ArticleDetailsRepository articleDetailsRepository = ArticleDetailsRepository();
+  LocalDataSourceRepository articleDetailsRepository = LocalDataSourceRepository();
   bool lacalDataIsNotRestored = true;
   addItemToStaredItems(ArticleDetailsItem item){
     staredUrls.add(item.url);
