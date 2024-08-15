@@ -1,17 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:profissional_news_app/screens_and_widgets/shared_ui_components.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../model/article_details_item_model.dart';
 
-class NewsDetails extends StatelessWidget {
+class NewsDetails extends StatefulWidget {
   static const String route = "NewsDetails";
-  late Uri _url;
   ArticleDetailsItem articleDetailsItem;
   NewsDetails(
       {required this.articleDetailsItem});
+
+  @override
+  State<NewsDetails> createState() => _NewsDetailsState();
+}
+
+class _NewsDetailsState extends State<NewsDetails> {
+  InternetConnectionChecker _internetConnectionChecker = InternetConnectionChecker();
+
+  late Uri _url;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
@@ -33,7 +43,7 @@ class NewsDetails extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: CachedNetworkImage(
-                    imageUrl: articleDetailsItem.imageUrl,
+                    imageUrl: widget.articleDetailsItem.imageUrl,
                     height: height * 0.5,
                     width: width,
                     fit: BoxFit.fill,
@@ -56,7 +66,7 @@ class NewsDetails extends StatelessWidget {
                   child: ListView(
                     children: [
                       Text(
-                        articleDetailsItem.title,
+                        widget.articleDetailsItem.title,
                         style: GoogleFonts.poppins(
                             fontSize: 20, fontWeight: FontWeight.w700),
                       ),
@@ -64,7 +74,7 @@ class NewsDetails extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: GestureDetector(
                           onTap: () {
-                            _url = Uri.parse(articleDetailsItem.url);
+                            _url = Uri.parse(widget.articleDetailsItem.url);
                             _launchUrl();
                           },
                           child: Row(
@@ -91,7 +101,7 @@ class NewsDetails extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              articleDetailsItem.sourceName,
+                              widget.articleDetailsItem.sourceName,
                               style: GoogleFonts.poppins(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -100,7 +110,7 @@ class NewsDetails extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              articleDetailsItem.publishedAt,
+                              widget.articleDetailsItem.publishedAt,
                               style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -114,7 +124,7 @@ class NewsDetails extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Text(
-                          articleDetailsItem.description,
+                          widget.articleDetailsItem.description,
                           style: GoogleFonts.poppins(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -141,9 +151,29 @@ class NewsDetails extends StatelessWidget {
       ),
     );
   }
+
   Future<void> _launchUrl() async {
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
+    if (await _internetConnectionChecker.hasConnection){
+      if (!await launchUrl(_url)) {
+        throw Exception('Could not launch $_url');
+      }
+    }else{
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Center(
+                    child: Text('ok'),
+                  ))
+            ],
+            title: Center(child: Text('No Internet Connection')),
+            contentPadding: EdgeInsets.all(20),
+            content: Text('Your offline check your connection and try again'),
+          ));
     }
   }
 }
