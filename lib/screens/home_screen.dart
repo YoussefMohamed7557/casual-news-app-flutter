@@ -71,13 +71,13 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     if (index == 0)
                     {
-                      return OutlinedNewsListView(screenHeight: height, screenWidth: width, rebuildAction: (){});
+                      return OutlinedNewsListView(screenHeight: height, screenWidth: width);
                     }
                     else
                     {
                       return CategorizedNewsWidget(screenHeight: height,screenWidth: width,
                         articleDetailsItem:AppUtitlities.extractArticlesDetailsInfo(snapshot.data![index]) ,
-                        rebuildAction: (){},);
+                        );
                     }
                   });
             }

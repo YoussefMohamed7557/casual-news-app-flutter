@@ -44,9 +44,8 @@ class CustomPopupMenuButton extends StatelessWidget {
   }
 }
 class StarWidget extends StatelessWidget {
-  StarWidget({required this.item,required this.rebuildAction,required this.margin,super.key});
+  StarWidget({required this.item,required this.margin,super.key});
   ArticleDetailsItem item;
-  Function rebuildAction;
   EdgeInsetsGeometry margin;
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,6 @@ class StarWidget extends StatelessWidget {
             }else{
               provider.addItemToStaredItems(item);
             }
-            rebuildAction();
           },
           child: Container(
             margin: margin,
@@ -79,12 +77,10 @@ class CategorizedNewsWidget extends StatelessWidget {
   ArticleDetailsItem articleDetailsItem;
   double screenHeight;
   double screenWidth;
-  Function() rebuildAction;/*() {setState(() {});}*/
   CategorizedNewsWidget(
       { required this.articleDetailsItem,
         required this.screenHeight,
-        required this.screenWidth,
-        required this.rebuildAction});
+        required this.screenWidth,});
   @override
   Widget build(BuildContext context) {
     // ArticleDetailsItem articleDetailsItem =extractArticlesDetailsInfo(snapshot);
@@ -123,7 +119,7 @@ class CategorizedNewsWidget extends StatelessWidget {
                           ),
                         ),
                       )),
-                  StarWidget(margin:EdgeInsets.symmetric(horizontal: 14,vertical: 14),item: articleDetailsItem , rebuildAction: rebuildAction )
+                  StarWidget(margin:EdgeInsets.symmetric(horizontal: 14,vertical: 14),item: articleDetailsItem  )
                 ]
             ),
           ),
@@ -177,19 +173,23 @@ class CategorizedNewsWidget extends StatelessWidget {
     );
   }
 }
-class OutlinedNewsListView extends StatelessWidget {
+class OutlinedNewsListView extends StatefulWidget {
   double screenHeight;
   double screenWidth;
-  Function rebuildAction;
   OutlinedNewsListView(
-      {required this.screenHeight,required this.screenWidth,required this.rebuildAction});
+      {required this.screenHeight,required this.screenWidth});
 
+  @override
+  State<OutlinedNewsListView> createState() => _OutlinedNewsListViewState();
+}
+
+class _OutlinedNewsListViewState extends State<OutlinedNewsListView> {
   @override
   Widget build(BuildContext context) {
     ArticleDetailsItem articleDetailsItem;
     return SizedBox(
-      height: screenHeight * 0.55,
-      width: screenWidth,
+      height: widget.screenHeight * 0.55,
+      width: widget.screenWidth,
       child: FutureBuilder<List<Articles>>(
         future: fetchTopHeadlines(),
         builder: (context, snapshot) {
@@ -211,7 +211,7 @@ class OutlinedNewsListView extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () {
-                        rebuildAction();
+                        setState(() { });
                       },
                       icon: Icon(
                         Icons.refresh,
@@ -254,8 +254,8 @@ class OutlinedNewsListView extends StatelessWidget {
                           ),
                         ], // Shadow for elevation effect
                       ),
-                      height: screenHeight * .6,
-                      width: screenWidth * .8,
+                      height: widget.screenHeight * .6,
+                      width: widget.screenWidth * .8,
                       margin: EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: ClipRRect(
@@ -283,7 +283,7 @@ class OutlinedNewsListView extends StatelessWidget {
                             ),
                             Container(
                               margin: EdgeInsets.all(20),
-                              height: screenHeight * .6 * .4,
+                              height: widget.screenHeight * .6 * .4,
                               decoration: BoxDecoration(
                                   color: Colors.white70,
                                   borderRadius:
@@ -382,7 +382,7 @@ class OutlinedNewsListView extends StatelessWidget {
                                 top: 8,
                                 left: 6,
                                 child:StarWidget(margin:EdgeInsets.symmetric(horizontal: 14,vertical: 14),item:AppUtitlities.extractArticlesDetailsInfo(
-                                    snapshot.data![index]), rebuildAction: (){rebuildAction();})
+                                    snapshot.data![index]))
                             )
                           ],
                         ),
@@ -412,7 +412,7 @@ class _StaredItemsListViewState extends State<StaredItemsListView> {
       builder: (context, provider, child) {
         return ListView.builder(
           itemCount: provider.staredArticles.length,
-          itemBuilder: (context, index) => CategorizedNewsWidget(articleDetailsItem:provider.staredArticles[index] , screenHeight: height, screenWidth: width, rebuildAction:(){setState(() {});}),);
+          itemBuilder: (context, index) => CategorizedNewsWidget(articleDetailsItem:provider.staredArticles[index] , screenHeight: height, screenWidth: width),);
       },
     );
   }

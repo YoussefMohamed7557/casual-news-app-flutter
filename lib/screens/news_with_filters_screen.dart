@@ -120,7 +120,7 @@ class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
                             margin: EdgeInsets.all(8),
                             child: CategorizedNewsWidget( screenHeight: height,screenWidth: width,
                               articleDetailsItem:AppUtitlities.extractArticlesDetailsInfo(snapshot.data![index] ),
-                              rebuildAction: (){},),
+                              ),
                           );
                         }
                       });
