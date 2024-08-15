@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:profissional_news_app/model/app_utitlities.dart';
 import 'package:profissional_news_app/model/shared.dart';
+import 'package:profissional_news_app/screens/shared_ui_components.dart';
 import '../model/specific_source.dart';
 class NewsWithFiltersScreen extends StatefulWidget {
   const NewsWithFiltersScreen({super.key});
@@ -117,8 +119,8 @@ class _NewsWithFiltersScreenState extends State<NewsWithFiltersScreen> {
                           return Container(
                             margin: EdgeInsets.all(8),
                             child: CategorizedNewsWidget( screenHeight: height,screenWidth: width,
-                              articleDetailsItem:extractArticlesDetailsInfo(snapshot.data![index] ),
-                              rebuildAction: (){setState(() {});},),
+                              articleDetailsItem:AppUtitlities.extractArticlesDetailsInfo(snapshot.data![index] ),
+                              rebuildAction: (){},),
                           );
                         }
                       });

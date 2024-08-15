@@ -43,6 +43,7 @@ dependencies:
   url_launcher: ^6.3.0
   hive_flutter:
   hive:
+  provider: ^6.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

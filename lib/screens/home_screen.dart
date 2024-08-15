@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:profissional_news_app/model/app_utitlities.dart';
 import 'package:profissional_news_app/model/specific_source.dart';
 import 'package:profissional_news_app/screens/news_with_filters_screen.dart';
+import 'package:profissional_news_app/screens/shared_ui_components.dart';
+import 'package:provider/provider.dart';
 import '../model/shared.dart';
+import '../model/stared_news_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,12 +17,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   int _selectedIndex = 0;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+  @override
+  initState(){
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
@@ -60,13 +71,13 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     if (index == 0)
                     {
-                      return OutlinedNewsListView(screenHeight: height, screenWidth: width, rebuildAction: (){setState(() {});});
+                      return OutlinedNewsListView(screenHeight: height, screenWidth: width, rebuildAction: (){});
                     }
                     else
                     {
                       return CategorizedNewsWidget(screenHeight: height,screenWidth: width,
-                        articleDetailsItem:extractArticlesDetailsInfo(snapshot.data![index]) ,
-                        rebuildAction: (){setState(() {});},);
+                        articleDetailsItem:AppUtitlities.extractArticlesDetailsInfo(snapshot.data![index]) ,
+                        rebuildAction: (){},);
                     }
                   });
             }
